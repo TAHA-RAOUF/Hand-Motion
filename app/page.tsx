@@ -5,9 +5,12 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Suspense, useState } from "react";
 import HandScene from "./HandScene";
+import HandGestureScene from "./HandGestureScene";
+import TitleScene from "./TitleScene";
 import HandTracker from "./HandTracker";
 import ParticlesBackground from "./ParticlesBackground";
 import StartButton from "./StartButton";
+import SelectionScreen, { ExperienceType } from "./SelectionScreen";
 
 type HandData = {
   x: number;
@@ -16,12 +19,15 @@ type HandData = {
   openness: number;
   swipeDirection: "left" | "right" | "up" | "down" | null;
   velocity: number;
+  landmarks?: any[];
 };
 
 export default function HomePage() {
   const [handPos, setHandPos] = useState<HandData | null>(null);
   const [started, setStarted] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState<ExperienceType | null>(null);
 
+  // Show start screen
   if (!started) {
     return (
       <main className="w-screen h-screen bg-black flex items-center justify-center relative overflow-hidden">
@@ -65,7 +71,7 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity"
             >
-              Black_Wolf
+              Moraouf
             </a>
           </p>
         </footer>
@@ -73,6 +79,12 @@ export default function HomePage() {
     );
   }
 
+  // Show selection screen after start button is clicked
+  if (!selectedExperience) {
+    return <SelectionScreen onSelect={setSelectedExperience} />;
+  }
+
+  // Show the selected experience
   return (
     <main className="w-screen h-screen bg-black relative">
       <HandTracker onHandMove={setHandPos} />
@@ -81,16 +93,47 @@ export default function HomePage() {
         <ambientLight intensity={0.6} />
         <directionalLight position={[5, 5, 5]} intensity={1.2} />
         <Suspense fallback={null}>
-          <HandScene handPos={handPos} />
+          {selectedExperience === "particles" && <HandScene handPos={handPos} />}
+          {selectedExperience === "gestures" && <HandGestureScene handPos={handPos} />}
+          {selectedExperience === "title" && <TitleScene handPos={handPos} />}
         </Suspense>
         <OrbitControls enableZoom={false} />
       </Canvas>
+
+      {/* Experience info overlay */}
+      <div className="absolute top-4 left-4 z-50 bg-black/50 backdrop-blur-sm rounded-lg p-4 border border-gray-800">
+        <h3 className="text-white text-sm font-semibold mb-2">
+          {selectedExperience === "particles" && "🎨 Particle Control"}
+          {selectedExperience === "gestures" && "👋 Hand Gesture Mode"}
+          {selectedExperience === "title" && "📝 Text Control"}
+        </h3>
+        <p className="text-gray-400 text-xs mb-2">
+          {handPos ? "Hand detected ✓" : "Show your hand to camera"}
+        </p>
+        
+        {/* Instructions for Title mode */}
+        {selectedExperience === "title" && (
+          <div className="text-xs text-gray-300 space-y-1 mt-3 border-t border-gray-700 pt-2">
+            <p>✋ 1 finger → <span className="text-cyan-400">Hello</span></p>
+            <p>✌️ 2 fingers → <span className="text-pink-400">World</span></p>
+            <p>🤟 3 fingers → <span className="text-yellow-400">This is 3D</span></p>
+            <p>👈👉 Swipe → Clear text</p>
+          </div>
+        )}
+        
+        <button
+          onClick={() => setSelectedExperience(null)}
+          className="mt-2 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+        >
+          ← Change mode
+        </button>
+      </div>
 
       {/* Footer for 3D view */}
       <footer className="absolute bottom-4 left-0 right-0 text-center z-50">
         <p className="text-gray-600 text-xs">
           Created by{" "}
-          <span className="text-purple-400 font-semibold">Black Wolf</span>
+          <span className="text-purple-400 font-semibold">Black_Wolf</span>
         </p>
       </footer>
     </main>

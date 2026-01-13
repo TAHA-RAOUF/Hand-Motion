@@ -9,6 +9,7 @@ type HandData = {
   openness: number; // 0 = closed, 1 = fully open
   swipeDirection: 'left' | 'right' | 'up' | 'down' | null;
   velocity: number;
+  landmarks?: any[]; // Full MediaPipe landmarks for detailed finger control
 };
 
 type Props = {
@@ -140,7 +141,7 @@ export default function HandTracker({ onHandMove }: Props) {
             previousPos.current = { x: nx, y: ny, time: now };
             
             setHandDetected(true);
-            onHandMove({ x: nx, y: ny, isOpen, openness, swipeDirection, velocity });
+            onHandMove({ x: nx, y: ny, isOpen, openness, swipeDirection, velocity, landmarks: lm });
           } else {
             setHandDetected(false);
             onHandMove(null);
