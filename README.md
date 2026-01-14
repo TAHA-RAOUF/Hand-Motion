@@ -1,4 +1,4 @@
-# 🎨 Hand Motion Studio
+#  Hand Motion Studio
 
 > **Created by [Moraouf](https://github.com/TAHA-RAOUF) © 2026 | Licensed under MIT**
 
@@ -15,7 +15,7 @@ An interactive 3D particle system controlled by hand gestures using MediaPipe an
 - 🖐️ **Real-time Hand Tracking** - Uses MediaPipe Hands for accurate hand detection
 - 🎯 **Gesture Controls** - Open/close hand to expand/contract particles
 - 🌊 **4 Particle Modes** - Swipe to cycle through Sphere, Wave, Helix, and Cube patterns
-- 🎨 **Dynamic Colors** - Each mode has unique color themes
+-  **Dynamic Colors** - Each mode has unique color themes
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile devices
 - ⚡ **Ultra Smooth Transitions** - Imperceptible particle movements
 - 🎥 **Live Camera Feed** - See your hand tracking in real-time
@@ -31,7 +31,7 @@ An interactive 3D particle system controlled by hand gestures using MediaPipe an
 | 👈 Swipe Left | Previous particle pattern |
 | ☝️ Swipe Up/Down | Burst effects |
 
-## 🎨 Particle Modes
+##  Particle Modes
 
 1. **Sphere** (Cyan/Magenta) - Default flowing particles
 2. **Wave** (Green/Yellow) - Undulating wave pattern

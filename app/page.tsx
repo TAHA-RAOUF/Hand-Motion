@@ -115,7 +115,7 @@ export default function HomePage() {
       {/* Experience info overlay */}
       <div className="absolute top-4 left-4 z-50 bg-black/50 backdrop-blur-sm rounded-lg p-4 border border-gray-800">
         <h3 className="text-white text-sm font-semibold mb-2">
-          {selectedExperience === "particles" && "🎨 Particle Control"}
+          {selectedExperience === "particles" && " Particle Control"}
           {selectedExperience === "gestures" && "👋 Hand Gesture Mode"}
           {selectedExperience === "title" && "📝 Text Control"}
         </h3>

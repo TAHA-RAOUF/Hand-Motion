@@ -33,7 +33,8 @@ export default function HandScene({ handPos }: Props) {
   const currentScale = useRef(1);
   const currentColor = useRef(new THREE.Color("#ff4b9b"));
   const swipeEffect = useRef({ active: false, direction: '', intensity: 0 });
-  const particleMode = useRef(0); // 0 = sphere, 1 = wave, 2 = helix, 3 = cube
+  const particleMode = useRef(0); // 10 amazing modes!
+  const totalModes = 10;
 
   // Create particles
   const particlesCount = 2000;
@@ -70,9 +71,9 @@ export default function HandScene({ handPos }: Props) {
       
       // Change particle mode on swipe
       if (handPos.swipeDirection === 'right') {
-        particleMode.current = (particleMode.current + 1) % 4;
+        particleMode.current = (particleMode.current + 1) % totalModes;
       } else if (handPos.swipeDirection === 'left') {
-        particleMode.current = (particleMode.current - 1 + 4) % 4;
+        particleMode.current = (particleMode.current - 1 + totalModes) % totalModes;
       }
     }
     
@@ -138,6 +139,69 @@ export default function HandScene({ handPos }: Props) {
             targetY = Math.round(targetY * 2) / 2 * spreadFactor;
             targetZ = Math.round(targetZ * 2) / 2 * spreadFactor;
             break;
+            
+          case 4: // Galaxy Spiral - AMAZING!
+            const spiralAngle = time * 0.5 + i * 0.1;
+            const spiralRadius = (i / particlesCount) * 2 * spreadFactor;
+            const spiralArms = 3;
+            targetX = Math.cos(spiralAngle * spiralArms) * spiralRadius;
+            targetZ = Math.sin(spiralAngle * spiralArms) * spiralRadius;
+            targetY = Math.sin(i * 0.05 + time) * 0.3 * spreadFactor;
+            break;
+            
+          case 5: // Torus/Donut - WOW!
+            const torusAngle1 = (i / particlesCount) * Math.PI * 2 * 8;
+            const torusAngle2 = (i / particlesCount) * Math.PI * 2 * 2 + time;
+            const majorRadius = 0.8 * spreadFactor;
+            const minorRadius = 0.3 * spreadFactor;
+            targetX = (majorRadius + minorRadius * Math.cos(torusAngle1)) * Math.cos(torusAngle2);
+            targetY = (majorRadius + minorRadius * Math.cos(torusAngle1)) * Math.sin(torusAngle2);
+            targetZ = minorRadius * Math.sin(torusAngle1);
+            break;
+            
+          case 6: // Flower/Mandala - BEAUTIFUL!
+            const petalAngle = (i / particlesCount) * Math.PI * 2 * 5 + time * 0.5;
+            const petalRadius = (0.5 + Math.sin((i / particlesCount) * Math.PI * 2 * 8) * 0.3) * spreadFactor;
+            targetX = Math.cos(petalAngle) * petalRadius;
+            targetY = Math.sin(petalAngle) * petalRadius;
+            targetZ = Math.sin(petalAngle * 3) * 0.2 * spreadFactor;
+            break;
+            
+          case 7: // Double Helix DNA - SCIENTIFIC!
+            const dnaAngle = time * 0.5 + i * 0.03;
+            const dnaRadius = 0.4 * spreadFactor;
+            const strand = i % 2;
+            targetX = Math.cos(dnaAngle + strand * Math.PI) * dnaRadius;
+            targetZ = Math.sin(dnaAngle + strand * Math.PI) * dnaRadius;
+            targetY = (i / particlesCount - 0.5) * 2.5 * spreadFactor;
+            // Add connecting rungs
+            if (i % 20 === 0) {
+              targetX *= 0.3;
+              targetZ *= 0.3;
+            }
+            break;
+            
+          case 8: // Explosion/Firework - DYNAMIC!
+            const explodeRadius = (Math.sin(time * 2) * 0.5 + 0.5) * 1.5 * spreadFactor;
+            const burstAngle1 = (i / particlesCount) * Math.PI * 2;
+            const burstAngle2 = Math.sin(i * 0.1) * Math.PI;
+            targetX = Math.sin(burstAngle2) * Math.cos(burstAngle1) * explodeRadius;
+            targetY = Math.sin(burstAngle2) * Math.sin(burstAngle1) * explodeRadius;
+            targetZ = Math.cos(burstAngle2) * explodeRadius;
+            // Add sparkle effect
+            const sparkle = Math.sin(time * 10 + i * 0.5) * 0.1;
+            targetX += sparkle;
+            targetY += sparkle;
+            break;
+            
+          case 9: // Möbius Strip - MIND-BENDING!
+            const mobiusAngle = (i / particlesCount) * Math.PI * 2 * 2 + time * 0.3;
+            const mobiusWidth = (i % 50) / 50 - 0.5;
+            const mobiusRadius = 1 * spreadFactor;
+            targetX = (mobiusRadius + mobiusWidth * Math.cos(mobiusAngle / 2)) * Math.cos(mobiusAngle);
+            targetY = (mobiusRadius + mobiusWidth * Math.cos(mobiusAngle / 2)) * Math.sin(mobiusAngle);
+            targetZ = mobiusWidth * Math.sin(mobiusAngle / 2) * spreadFactor;
+            break;
         }
         
         // Add swipe burst effect
@@ -179,6 +243,25 @@ export default function HandScene({ handPos }: Props) {
           break;
         case 3: // Cube - Red/Orange
           targetColor = new THREE.Color("#ff0044").lerp(new THREE.Color("#ff8800"), Math.sin(state.clock.elapsedTime * 0.4) * 0.5 + 0.5);
+          break;
+        case 4: // Galaxy - Deep Purple/Blue
+          targetColor = new THREE.Color("#4a0080").lerp(new THREE.Color("#0080ff"), Math.sin(state.clock.elapsedTime * 0.6) * 0.5 + 0.5);
+          break;
+        case 5: // Torus - Pink/Cyan
+          targetColor = new THREE.Color("#ff1493").lerp(new THREE.Color("#00ffff"), Math.sin(state.clock.elapsedTime * 0.7) * 0.5 + 0.5);
+          break;
+        case 6: // Flower - Rainbow gradient
+          const hue = (state.clock.elapsedTime * 0.1) % 1;
+          targetColor = new THREE.Color().setHSL(hue, 1, 0.6);
+          break;
+        case 7: // DNA - Green/Cyan
+          targetColor = new THREE.Color("#00ff00").lerp(new THREE.Color("#00ffff"), Math.sin(state.clock.elapsedTime * 0.4) * 0.5 + 0.5);
+          break;
+        case 8: // Explosion - Hot colors
+          targetColor = new THREE.Color("#ffff00").lerp(new THREE.Color("#ff0000"), Math.sin(state.clock.elapsedTime * 2) * 0.5 + 0.5);
+          break;
+        case 9: // Möbius - Violet/Indigo
+          targetColor = new THREE.Color("#8a2be2").lerp(new THREE.Color("#4b0082"), Math.sin(state.clock.elapsedTime * 0.5) * 0.5 + 0.5);
           break;
         default:
           targetColor = new THREE.Color("#ff4b9b");
