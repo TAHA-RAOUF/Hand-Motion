@@ -214,8 +214,8 @@ function RealisticHand({ handPos }: Props) {
         />
       </mesh>
 
-      {/* Thumb - positioned on the side, properly visible */}
-      <group ref={thumbRef} position={[0.75, 0.1, 0.25]} rotation={[0.2, 0, 0.5]}>
+      {/* Thumb - leftmost finger */}
+      <group ref={thumbRef} position={[-0.65, 0.45, 0.15]} rotation={[0.1, 0, -0.3]}>
         {/* Metacarpal */}
         <mesh position={[0, 0.18, 0]} castShadow receiveShadow>
           <capsuleGeometry args={[0.13, 0.35, 8, 16]} />
@@ -258,8 +258,8 @@ function RealisticHand({ handPos }: Props) {
         </group>
       </group>
 
-      {/* Index Finger */}
-      <group ref={indexRef} position={[-0.38, 0.8, 0]}>
+      {/* Index Finger - second from left */}
+      <group ref={indexRef} position={[-0.32, 0.8, 0]}>
         {/* Proximal phalanx */}
         <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
           <capsuleGeometry args={[0.11, 0.4, 8, 16]} />
@@ -302,7 +302,7 @@ function RealisticHand({ handPos }: Props) {
         </group>
       </group>
 
-      {/* Middle Finger */}
+      {/* Middle Finger - center, tallest */}
       <group ref={middleRef} position={[0, 0.85, 0]}>
         {/* Proximal phalanx */}
         <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
@@ -346,8 +346,8 @@ function RealisticHand({ handPos }: Props) {
         </group>
       </group>
 
-      {/* Ring Finger */}
-      <group ref={ringRef} position={[0.38, 0.8, 0]}>
+      {/* Ring Finger - fourth from left */}
+      <group ref={ringRef} position={[0.32, 0.8, 0]}>
         {/* Proximal phalanx */}
         <mesh position={[0, 0.22, 0]} castShadow receiveShadow>
           <capsuleGeometry args={[0.11, 0.4, 8, 16]} />
@@ -390,8 +390,8 @@ function RealisticHand({ handPos }: Props) {
         </group>
       </group>
 
-      {/* Pinky Finger */}
-      <group ref={pinkyRef} position={[0.62, 0.58, 0]}>
+      {/* Pinky Finger - rightmost, shortest */}
+      <group ref={pinkyRef} position={[0.58, 0.58, 0]}>
         {/* Proximal phalanx */}
         <mesh position={[0, 0.18, 0]} castShadow receiveShadow>
           <capsuleGeometry args={[0.095, 0.32, 8, 16]} />
