@@ -1,3 +1,12 @@
+/**
+ * Hand Motion Studio - Main Page
+ * Created by Moraouf © 2026
+ * GitHub: https://github.com/TAHA-RAOUF
+ * 
+ * This file is part of Hand Motion Studio.
+ * Licensed under the MIT License.
+ */
+
 // app/page.tsx
 "use client";
 
@@ -61,19 +70,22 @@ export default function HomePage() {
           <StartButton onClick={() => setStarted(true)} />
         </div>
 
-        {/* Footer */}
+        {/* Footer with copyright notice */}
         <footer className="absolute bottom-8 left-0 right-0 text-center">
-          <p className="text-gray-500 text-sm">
-            Created by{" "}
-            <a
-              href="https://github.com/TAHA-RAOUF"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity"
-            >
-              Moraouf
-            </a>
-          </p>
+          <div className="inline-block bg-black/40 backdrop-blur-sm px-6 py-3 rounded-full border border-gray-800/50">
+            <p className="text-gray-400 text-sm">
+              © 2026 Created by{" "}
+              <a
+                href="https://github.com/TAHA-RAOUF"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent font-semibold hover:opacity-80 transition-opacity"
+              >
+                Moraouf
+              </a>
+              {" "}- All Rights Reserved
+            </p>
+          </div>
         </footer>
       </main>
     );
@@ -129,12 +141,22 @@ export default function HomePage() {
         </button>
       </div>
 
-      {/* Footer for 3D view */}
+      {/* Footer for 3D view - Copyright watermark */}
       <footer className="absolute bottom-4 left-0 right-0 text-center z-50">
-        <p className="text-gray-600 text-xs">
-          Created by{" "}
-          <span className="text-purple-400 font-semibold">Black_Wolf</span>
-        </p>
+        <div className="inline-block bg-black/60 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-700/50">
+          <p className="text-gray-400 text-xs">
+            © 2026 Created by{" "}
+            <a 
+              href="https://github.com/TAHA-RAOUF" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors"
+            >
+              Moraouf
+            </a>
+            {" "}- All Rights Reserved
+          </p>
+        </div>
       </footer>
     </main>
   );

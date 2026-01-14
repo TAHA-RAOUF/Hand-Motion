@@ -1,0 +1,8 @@
+# Ensure LICENSE and COPYRIGHT files are included
+LICENSE export
+COPYRIGHT.md export
+README.md export
+
+# Mark all source files with copyright headers
+*.tsx linguist-language=TypeScript
+*.ts linguist-language=TypeScript

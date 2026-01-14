@@ -1,10 +1,14 @@
 # 🎨 Hand Motion Studio
 
+> **Created by [Moraouf](https://github.com/TAHA-RAOUF) © 2026 | Licensed under MIT**
+
 An interactive 3D particle system controlled by hand gestures using MediaPipe and Three.js. Move your hand to control beautiful particle formations in real-time!
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black)
 ![React Three Fiber](https://img.shields.io/badge/React%20Three%20Fiber-latest-blue)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands-green)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Copyright](https://img.shields.io/badge/Copyright-Moraouf%202026-blue)
 
 ## ✨ Features
 
@@ -108,7 +112,7 @@ Requires webcam access and JavaScript enabled.
 
 ## 👤 Author
 
-**Black Wolf**
+**Moraouf** - [GitHub](https://github.com/TAHA-RAOUF)
 
 ## 📄 License
 
@@ -121,4 +125,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-Made with ❤️ by Black Wolf
+**Created by Moraouf © 2026** | Made with ❤️ | [GitHub](https://github.com/TAHA-RAOUF)

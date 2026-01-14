@@ -1,3 +1,12 @@
+/**
+ * Hand Motion Studio - Experience Selection Screen
+ * Created by Moraouf © 2026
+ * GitHub: https://github.com/TAHA-RAOUF
+ * 
+ * This file is part of Hand Motion Studio.
+ * Licensed under the MIT License.
+ */
+
 "use client";
 
 export type ExperienceType = "particles" | "gestures" | "title";
@@ -111,6 +120,24 @@ export default function SelectionScreen({ onSelect }: Props) {
           </button>
         </div>
       </div>
+
+      {/* Copyright footer */}
+      <footer className="absolute bottom-6 left-0 right-0 text-center z-50">
+        <div className="inline-block bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-800/50">
+          <p className="text-gray-500 text-xs">
+            © 2026 Created by{" "}
+            <a 
+              href="https://github.com/TAHA-RAOUF" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors"
+            >
+              Moraouf
+            </a>
+            {" "}- All Rights Reserved
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }

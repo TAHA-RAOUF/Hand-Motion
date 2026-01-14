@@ -1,6 +1,8 @@
 {
   "name": "attractors-hand-demo",
   "version": "0.1.0",
+  "author": "Moraouf (https://github.com/TAHA-RAOUF)",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -1,3 +1,12 @@
+/**
+ * Hand Motion Studio - Start Button Component
+ * Created by Moraouf © 2026
+ * GitHub: https://github.com/TAHA-RAOUF
+ * 
+ * This file is part of Hand Motion Studio.
+ * Licensed under the MIT License.
+ */
+
 "use client";
 
 import "./startButton.css";
