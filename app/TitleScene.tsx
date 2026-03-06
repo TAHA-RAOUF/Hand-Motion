@@ -13,15 +13,7 @@ import { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Text, Center } from "@react-three/drei";
 import * as THREE from "three";
-
-type HandData = {
-  x: number;
-  y: number;
-  isOpen: boolean;
-  openness: number;
-  swipeDirection: 'left' | 'right' | 'up' | 'down' | null;
-  velocity: number;
-};
+import type { HandData } from "./types";
 
 type Props = {
   handPos: HandData | null;
