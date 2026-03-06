@@ -12,15 +12,7 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-
-type HandData = {
-  x: number;
-  y: number;
-  isOpen: boolean;
-  openness: number;
-  swipeDirection: 'left' | 'right' | 'up' | 'down' | null;
-  velocity: number;
-};
+import type { HandData } from "./types";
 
 type Props = {
   handPos: HandData | null;
@@ -31,16 +23,16 @@ export default function HandScene({ handPos }: Props) {
   const targetPos = useRef(new THREE.Vector3(0, 0, 0));
   const currentPos = useRef(new THREE.Vector3(0, 0, 0));
   const currentScale = useRef(1);
-  const currentColor = useRef(new THREE.Color("#ff4b9b"));
   const swipeEffect = useRef({ active: false, direction: '', intensity: 0 });
   const particleMode = useRef(0); // 10 amazing modes!
   const totalModes = 10;
 
   // Create particles
-  const particlesCount = 2000;
-  const { positions, originalPositions } = useMemo(() => {
+  const particlesCount = 3000;
+  const { positions, originalPositions, colors } = useMemo(() => {
     const pos = new Float32Array(particlesCount * 3);
     const original = new Float32Array(particlesCount * 3);
+    const col = new Float32Array(particlesCount * 3);
     for (let i = 0; i < particlesCount; i++) {
       const i3 = i * 3;
       const radius = Math.random() * 0.8;
@@ -54,8 +46,12 @@ export default function HandScene({ handPos }: Props) {
       pos[i3] = original[i3] = x;
       pos[i3 + 1] = original[i3 + 1] = y;
       pos[i3 + 2] = original[i3 + 2] = z;
+
+      col[i3] = 1;
+      col[i3 + 1] = 0.3;
+      col[i3 + 2] = 0.6;
     }
-    return { positions: pos, originalPositions: original };
+    return { positions: pos, originalPositions: original, colors: col };
   }, []);
 
   useFrame((state) => {
@@ -88,7 +84,7 @@ export default function HandScene({ handPos }: Props) {
     // Smooth hand position following
     if (handPos) {
       targetPos.current.set(handPos.x * 3, handPos.y * 3, 0);
-      currentPos.current.lerp(targetPos.current, 0.05); // Ultra smooth movement
+      currentPos.current.lerp(targetPos.current, 0.15); // Responsive movement
       
       // Scale particles based on hand openness
       const targetScale = handPos.isOpen ? 1.5 + handPos.openness * 0.8 : 0.5 + handPos.openness * 0.3;
@@ -226,49 +222,35 @@ export default function HandScene({ handPos }: Props) {
       }
       
       geometry.attributes.position.needsUpdate = true;
-      
-      // Color changes based on mode and hand state
-      let targetColor: THREE.Color;
-      switch (particleMode.current) {
-        case 0: // Sphere - Cyan/Magenta
-          targetColor = handPos.isOpen 
-            ? new THREE.Color("#00ffff").lerp(new THREE.Color("#ff4b9b"), Math.sin(state.clock.elapsedTime) * 0.5 + 0.5)
-            : new THREE.Color("#8b00ff");
-          break;
-        case 1: // Wave - Green/Yellow
-          targetColor = new THREE.Color("#00ff88").lerp(new THREE.Color("#ffff00"), Math.sin(state.clock.elapsedTime * 0.5) * 0.5 + 0.5);
-          break;
-        case 2: // Helix - Blue/Purple
-          targetColor = new THREE.Color("#0088ff").lerp(new THREE.Color("#ff00ff"), Math.sin(state.clock.elapsedTime * 0.3) * 0.5 + 0.5);
-          break;
-        case 3: // Cube - Red/Orange
-          targetColor = new THREE.Color("#ff0044").lerp(new THREE.Color("#ff8800"), Math.sin(state.clock.elapsedTime * 0.4) * 0.5 + 0.5);
-          break;
-        case 4: // Galaxy - Deep Purple/Blue
-          targetColor = new THREE.Color("#4a0080").lerp(new THREE.Color("#0080ff"), Math.sin(state.clock.elapsedTime * 0.6) * 0.5 + 0.5);
-          break;
-        case 5: // Torus - Pink/Cyan
-          targetColor = new THREE.Color("#ff1493").lerp(new THREE.Color("#00ffff"), Math.sin(state.clock.elapsedTime * 0.7) * 0.5 + 0.5);
-          break;
-        case 6: // Flower - Rainbow gradient
-          const hue = (state.clock.elapsedTime * 0.1) % 1;
-          targetColor = new THREE.Color().setHSL(hue, 1, 0.6);
-          break;
-        case 7: // DNA - Green/Cyan
-          targetColor = new THREE.Color("#00ff00").lerp(new THREE.Color("#00ffff"), Math.sin(state.clock.elapsedTime * 0.4) * 0.5 + 0.5);
-          break;
-        case 8: // Explosion - Hot colors
-          targetColor = new THREE.Color("#ffff00").lerp(new THREE.Color("#ff0000"), Math.sin(state.clock.elapsedTime * 2) * 0.5 + 0.5);
-          break;
-        case 9: // Möbius - Violet/Indigo
-          targetColor = new THREE.Color("#8a2be2").lerp(new THREE.Color("#4b0082"), Math.sin(state.clock.elapsedTime * 0.5) * 0.5 + 0.5);
-          break;
-        default:
-          targetColor = new THREE.Color("#ff4b9b");
+
+      // Per-particle vertex colors based on mode
+      const col = geometry.attributes.color.array as Float32Array;
+      for (let i = 0; i < particlesCount; i++) {
+        const i3 = i * 3;
+        const t = state.clock.elapsedTime;
+        const fi = i / particlesCount;
+        let r = 0, g = 0, b = 0;
+
+        switch (particleMode.current) {
+          case 0: r = 0 + Math.sin(t + fi * 6) * 0.5 + 0.5; g = 1; b = 1; break;
+          case 1: r = 0; g = 0.5 + Math.sin(t * 0.5 + fi * 4) * 0.5; b = 0; break;
+          case 2: r = Math.sin(t * 0.3 + fi * 5) * 0.5 + 0.5; g = 0.3; b = 1; break;
+          case 3: r = 1; g = Math.sin(t * 0.4 + fi * 3) * 0.3 + 0.3; b = 0.2; break;
+          case 4: r = 0.3; g = 0; b = 0.5 + Math.sin(t * 0.6 + fi * 8) * 0.5; break;
+          case 5: r = 1; g = 0.1 + Math.sin(t * 0.7 + fi * 5) * 0.4; b = 0.9; break;
+          case 6: { const hue = (t * 0.1 + fi) % 1; const c = new THREE.Color().setHSL(hue, 1, 0.6); r = c.r; g = c.g; b = c.b; break; }
+          case 7: r = 0; g = 0.5 + Math.sin(t * 0.4 + fi * 6) * 0.5; b = 0.5 + Math.sin(t * 0.3 + fi * 4) * 0.5; break;
+          case 8: r = 1; g = 0.5 + Math.sin(t * 2 + fi * 10) * 0.5; b = 0; break;
+          case 9: r = 0.5 + Math.sin(t * 0.5 + fi * 7) * 0.3; g = 0.1; b = 0.5 + Math.sin(t * 0.3 + fi * 5) * 0.3; break;
+          default: r = 1; g = 0.3; b = 0.6;
+        }
+
+        const lf = 0.05;
+        col[i3] += (r - col[i3]) * lf;
+        col[i3 + 1] += (g - col[i3 + 1]) * lf;
+        col[i3 + 2] += (b - col[i3 + 2]) * lf;
       }
-      
-      currentColor.current.lerp(targetColor, 0.03); // Ultra smooth color transition
-      material.color.copy(currentColor.current);
+      geometry.attributes.color.needsUpdate = true;
       
       // Size changes with openness and swipes (ultra smooth)
       const targetSize = 0.015 + handPos.openness * 0.02 + (swipeEffect.current.active ? swipeEffect.current.intensity * 0.01 : 0);
@@ -291,14 +273,19 @@ export default function HandScene({ handPos }: Props) {
           attach="attributes-position"
           args={[positions, 3]}
         />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+        />
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
-        color="#ff4b9b"
+        vertexColors
         sizeAttenuation
         transparent
-        opacity={0.8}
+        opacity={0.85}
         blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </points>
   );
